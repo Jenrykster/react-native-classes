@@ -1,31 +1,46 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, View, FlatList, Button } from 'react-native';
+import GoalInput from './components/GoalInput';
+import GoalItem from './components/GoalItem';
 
 export default function App() {
-  const [enteredGoal, setEnteredGoal] = useState('');
   const [courseGoals, setCourseGoals] = useState([]);
-
-  const goalInputHandler = (enteredText) => {
-    setEnteredGoal(enteredText);
+  const [isAddmode, setIsAddMode] = useState(false);
+  const addGoalHandler = (enteredGoal) => {
+    setCourseGoals((currentGoals) => [
+      ...currentGoals,
+      { id: Math.random().toString(), value: enteredGoal },
+    ]);
+    setIsAddMode(false);
   };
-
-  const addGoalHandler = () => {
-    setCourseGoals((currentGoals) => [...currentGoals, enteredGoal]);
+  const cancelHandler = () => {
+    setIsAddMode(false);
   };
-
+  const removeGoalHandler = (goalId) => {
+    setCourseGoals((currrentGoals) => {
+      return currrentGoals.filter((goal) => goal.id !== goalId);
+    });
+  };
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          onChangeText={goalInputHandler}
-          placeholder='Course Goal'
-          placeholderTextColor='white'
-          style={styles.input}
-        />
-        <Button onPress={addGoalHandler} title='ADD' />
-      </View>
-      <View></View>
+      <Button title='Add new goal' onPress={() => setIsAddMode(true)} />
+      <GoalInput
+        visible={isAddmode}
+        onAddGoal={addGoalHandler}
+        onCancel={cancelHandler}
+      />
+      <FlatList
+        keyExtractor={(item) => item.id}
+        data={courseGoals}
+        renderItem={(itemData) => (
+          <GoalItem
+            id={itemData.item.id}
+            title={itemData.item.value}
+            onDelete={removeGoalHandler}
+          />
+        )}
+      />
       <StatusBar style='auto' />
     </View>
   );
@@ -37,17 +52,5 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flex: 1,
     backgroundColor: '#000',
-  },
-  inputContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  input: {
-    color: 'white',
-    width: '80%',
-    borderBottomColor: 'white',
-    borderBottomWidth: 1,
   },
 });
