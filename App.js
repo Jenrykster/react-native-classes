@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import MealsNavigator from './navigation/MealsNavigator';
 import * as Font from 'expo-font';
 import { useState } from 'react';
+import { enableScreens } from 'react-native-screens';
 
 const fetchFonts = () => {
   Font.loadAsync({
@@ -11,6 +12,9 @@ const fetchFonts = () => {
     'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
   });
 };
+
+enableScreens();
+
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
 
