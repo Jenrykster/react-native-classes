@@ -5,6 +5,9 @@ import MealsNavigator from './navigation/MealsNavigator';
 import * as Font from 'expo-font';
 import { useState } from 'react';
 import { enableScreens } from 'react-native-screens';
+import { createStore, combineReducers } from 'redux';
+
+import MealsNavigator from './navigation/MealsNavigator';
 
 const fetchFonts = async () => {
   await Font.loadAsync({
