@@ -6,8 +6,16 @@ import * as Font from 'expo-font';
 import { useState } from 'react';
 import { enableScreens } from 'react-native-screens';
 import { createStore, combineReducers } from 'redux';
+import mealsReducer from './store/reducers/meals';
+import { Provider } from 'react-redux';
 
-import MealsNavigator from './navigation/MealsNavigator';
+enableScreens();
+
+const rootReducer = combineReducers({
+  meals: mealsReducer,
+});
+
+const store = createStore(rootReducer);
 
 const fetchFonts = async () => {
   await Font.loadAsync({
@@ -31,5 +39,9 @@ export default function App() {
     );
   }
 
-  return <MealsNavigator />;
+  return (
+    <Provider store={store}>
+      <MealsNavigator />
+    </Provider>
+  );
 }

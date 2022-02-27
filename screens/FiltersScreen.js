@@ -2,8 +2,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
 import NativeHeadlessJsTaskSupport from 'react-native/Libraries/ReactNative/NativeHeadlessJsTaskSupport';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useDispatch } from 'react-redux';
 import HeaderButton from '../components/HeaderButton';
 import Colors from '../constants/Colors';
+import { setFilters } from '../store/actions/meals';
 
 const FilterSwitch = (props) => {
   return (
@@ -21,6 +23,7 @@ const FilterSwitch = (props) => {
 const FiltersScreen = (props) => {
   const [isGlutenFree, setIsGlutenFree] = useState(false);
   const [isVegan, setIsVegan] = useState(false);
+  const dispatch = useDispatch();
 
   const saveFilters = useCallback(() => {
     const appliedFilters = {
@@ -28,7 +31,8 @@ const FiltersScreen = (props) => {
       vegan: isVegan,
     };
     console.log(appliedFilters);
-  }, [isGlutenFree, isVegan]);
+    dispatch(setFilters(appliedFilters));
+  }, [isGlutenFree, isVegan, dispatch]);
 
   useEffect(() => {
     props.navigation.setParams({ save: saveFilters });
@@ -70,8 +74,7 @@ FiltersScreen.navigationOptions = (screenProps) => ({
         title='Save'
         iconName='ios-save'
         onPress={() => {
-          const filters = screenProps.navigation.getParam('save')();
-          console.log(filters);
+          screenProps.navigation.getParam('save')();
         }}
       />
     </HeaderButtons>
