@@ -7,12 +7,19 @@ import productsReducer from './store/reducers/products';
 import ShopNavigator from './navigation/ShopNavigator';
 import { useState } from 'react';
 import AppLoading from 'expo-app-loading';
+import cartReducer from './store/reducers/cart';
+import order from './store/reducers/order';
 
 const rootReducer = combineReducers({
   products: productsReducer,
+  cart: cartReducer,
+  orders: order,
 });
 
-const store = createStore(rootReducer);
+const store = createStore(
+  rootReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 const fetchFonts = () => {
   return Font.loadAsync({
