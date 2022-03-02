@@ -11,7 +11,7 @@ export default (state = initialState, action) => {
       const newOrder = new Order(
         new Date().toString(),
         action.orderData.items,
-        action.orderData.amount,
+        action.orderData.totalAmount,
         new Date()
       );
       console.log(state, action);

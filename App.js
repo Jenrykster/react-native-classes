@@ -8,12 +8,12 @@ import ShopNavigator from './navigation/ShopNavigator';
 import { useState } from 'react';
 import AppLoading from 'expo-app-loading';
 import cartReducer from './store/reducers/cart';
-import order from './store/reducers/order';
+import orderReducer from './store/reducers/order';
 
 const rootReducer = combineReducers({
   products: productsReducer,
   cart: cartReducer,
-  orders: order,
+  orders: orderReducer,
 });
 
 const store = createStore(

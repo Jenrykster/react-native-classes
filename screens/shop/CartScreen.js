@@ -28,7 +28,9 @@ const CartScreen = (props) => {
       <View style={styles.summary}>
         <Text style={styles.summaryText}>
           Total:
-          <Text style={styles.amount}>${cartTotalAmount.toFixed(2)}</Text>
+          <Text style={styles.amount}>
+            ${Math.round(cartTotalAmount.toFixed(2))}
+          </Text>
         </Text>
         <Button
           title='Order Now'
@@ -45,6 +47,7 @@ const CartScreen = (props) => {
         renderItem={(itemData) => {
           return (
             <CartItem
+              deletable
               quantity={itemData.item.quantity}
               title={itemData.item.productTitle}
               amount={itemData.item.sum}

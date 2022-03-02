@@ -12,9 +12,11 @@ const CartItem = (props) => {
       <View style={styles.itemData}>
         <Text style={styles.mainText}>{props.amount.toFixed(2)}</Text>
       </View>
-      <TouchableOpacity onPress={props.onRemove} style={styles.deleteButton}>
-        <Ionicons name='trash' size={23} color='red' />
-      </TouchableOpacity>
+      {props.deletable && (
+        <TouchableOpacity onPress={props.onRemove} style={styles.deleteButton}>
+          <Ionicons name='trash' size={23} color='red' />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

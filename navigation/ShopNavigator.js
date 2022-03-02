@@ -7,6 +7,9 @@ import ProductDetailScreen from '../screens/shop/ProductDetailScreen';
 import ProductsOverviewScreen from '../screens/shop/ProductOverviewScreen';
 import OrdersScreen from '../screens/shop/OrdersScreen';
 import { createDrawerNavigator } from 'react-navigation-drawer';
+import { Ionicons } from '@expo/vector-icons';
+import UserProductsScreen from '../screens/user/UserProductsScreen';
+import EditProductScreen from '../screens/user/EditProductScreen';
 
 const defaultNavOptions = {
   headerStyle: {
@@ -28,6 +31,13 @@ const ProductsNavigator = createStackNavigator(
     Cart: CartScreen,
   },
   {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => {
+        return (
+          <Ionicons name='cart' size={23} color={drawerConfig.tintColor} />
+        );
+      },
+    },
     defaultNavigationOptions: defaultNavOptions,
   }
 );
@@ -37,6 +47,30 @@ const OrdersNavigator = createStackNavigator(
     Orders: OrdersScreen,
   },
   {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => {
+        return (
+          <Ionicons name='list' size={23} color={drawerConfig.tintColor} />
+        );
+      },
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
+const AdminNavigator = createStackNavigator(
+  {
+    UserProducts: UserProductsScreen,
+    EditProduct: EditProductScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => {
+        return (
+          <Ionicons name='create' size={23} color={drawerConfig.tintColor} />
+        );
+      },
+    },
     defaultNavigationOptions: defaultNavOptions,
   }
 );
@@ -45,6 +79,7 @@ const ShopNavigator = createDrawerNavigator(
   {
     Products: ProductsNavigator,
     Orders: OrdersNavigator,
+    Admin: AdminNavigator,
   },
   {
     contentOptions: {
