@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import {
   View,
   Text,
@@ -6,11 +6,13 @@ import {
   ScrollView,
   TextInput,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomHeaderButton from '../../components/UI/HeaderButton';
 import Input from '../../components/UI/Input';
+import Colors from '../../constants/Colors';
 import * as productActions from '../../store/actions/products';
 
 const FORM_INPUT_UPDATE = 'UPDATE';
@@ -20,8 +22,9 @@ const formReducer = (state, action) => {
       ...state.inputValues,
       [action.input]: action.value,
     };
+    state;
     const updatedValidities = {
-      ...state.inputValues,
+      ...state.inputValidities,
       [action.input]: action.isValid,
     };
     let updatedFormIsValid = true;
@@ -37,6 +40,9 @@ const formReducer = (state, action) => {
   return state;
 };
 const EditProductScreen = (props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
+
   const prodId = props.navigation.getParam('productId');
   const editedProduct = useSelector((state) =>
     state.products.userProducts.find((prod) => prod.id === prodId)
@@ -59,32 +65,40 @@ const EditProductScreen = (props) => {
 
   const dispatch = useDispatch();
 
-  const submitHandler = useCallback(() => {
+  const submitHandler = useCallback(async () => {
     if (!formState.formIsValid) {
       Alert.alert('Wrong input!', 'Please check the errors in the form.', [
         { text: 'Okay' },
       ]);
       return;
     }
-    if (editedProduct) {
-      dispatch(
-        productActions.updateProduct(
-          prodId,
-          formState.inputValues.title,
-          formState.inputValues.description,
-          formState.inputValues.imageUrl
-        )
-      );
-    } else {
-      dispatch(
-        productActions.createProduct(
-          formState.inputValues.title,
-          formState.inputValues.description,
-          formState.inputValues.imageUrl,
-          formState.inputValues.price
-        )
-      );
+    try {
+      if (editedProduct) {
+        setError(null);
+        setIsLoading(true);
+        await dispatch(
+          productActions.updateProduct(
+            prodId,
+            formState.inputValues.title,
+            formState.inputValues.description,
+            formState.inputValues.imageUrl
+          )
+        );
+      } else {
+        await dispatch(
+          productActions.createProduct(
+            formState.inputValues.title,
+            formState.inputValues.description,
+            formState.inputValues.imageUrl,
+            formState.inputValues.price
+          )
+        );
+      }
+    } catch (err) {
+      setError(err.message);
     }
+
+    setIsLoading(false);
     props.navigation.goBack();
   }, [dispatch, prodId, formState]);
 
@@ -94,6 +108,7 @@ const EditProductScreen = (props) => {
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, value, isValid) => {
+      inputIdentifier;
       dispatchFormState({
         type: FORM_INPUT_UPDATE,
         value: value,
@@ -104,11 +119,24 @@ const EditProductScreen = (props) => {
     [dispatchFormState]
   );
 
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size='large' color={Colors.primary} />
+      </View>
+    );
+  }
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert('An error occurred', error, [{ text: 'Okay' }]);
+    }
+  }, [error]);
   return (
     <ScrollView>
       <View style={styles.form}>
         <Input
-          is='title'
+          id='title'
           label='Title'
           errorText='Please enter a valid title'
           autoCapitalize='sentences'
@@ -116,7 +144,6 @@ const EditProductScreen = (props) => {
           onInputChange={inputChangeHandler}
           initialValue={editedProduct ? editedProduct.title : ''}
           initiallyValid={!!editedProduct}
-          required
         />
         <Input
           id='imageUrl'
@@ -125,7 +152,6 @@ const EditProductScreen = (props) => {
           initialValue={editedProduct ? editedProduct.imageUrl : ''}
           initiallyValid={!!editedProduct}
           onInputChange={inputChangeHandler}
-          required
         />
 
         {editedProduct ? null : (
@@ -135,8 +161,6 @@ const EditProductScreen = (props) => {
             errorText='Please enter a valid price'
             keyboardType='decimal-pad'
             onInputChange={inputChangeHandler}
-            required
-            min={0.1}
           />
         )}
         <Input
@@ -148,8 +172,6 @@ const EditProductScreen = (props) => {
           initialValue={editedProduct ? editedProduct.description : ''}
           initiallyValid={!!editedProduct}
           onInputChange={inputChangeHandler}
-          required
-          minLength={5}
         />
       </View>
     </ScrollView>
@@ -186,6 +208,11 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderBottomColor: '#ccc',
     borderBottomWidth: 1,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
