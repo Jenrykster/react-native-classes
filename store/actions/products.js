@@ -8,6 +8,7 @@ export const SET_PRODUCTS = 'SET_PRODUCTS';
 
 export const fetchProducts = () => {
   return async (dispatch, getState) => {
+    const userId = getState().auth.userId;
     try {
       const response = await fetch(
         'https://rnative-a0ca6-default-rtdb.firebaseio.com/products.json'
@@ -24,7 +25,7 @@ export const fetchProducts = () => {
         loadedProducts.push(
           new Product(
             key,
-            'u1',
+            resData[key].ownerId,
             resData[key].title,
             resData[key].imageUrl,
             resData[key].description,
@@ -61,7 +62,7 @@ export const createProduct = (title, description, imageUrl, price) => {
   return async (dispatch, getState) => {
     const userId = getState().auth.userId;
     const response = await fetch(
-      `https://rnative-a0ca6-default-rtdb.firebaseio.com/products/${id}.json?auth=${
+      `https://rnative-a0ca6-default-rtdb.firebaseio.com/products/${userId}.json?auth=${
         getState().auth.token
       }`,
       {

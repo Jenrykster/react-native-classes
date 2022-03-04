@@ -15,6 +15,14 @@ const OrdersScreen = (props) => {
 
   const orders = useSelector((state) => state.orders.orders);
 
+  if (orders.length === 0) {
+    return (
+      <View>
+        <Text>No orders found</Text>
+      </View>
+    );
+  }
+
   return (
     <FlatList
       data={orders}

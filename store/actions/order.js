@@ -6,6 +6,7 @@ export const SET_ORDERS = 'SET_ORDERS';
 export const fetchOrders = () => {
   return async (dispatch, getState) => {
     const userId = getState().auth.userId;
+
     const response = await fetch(
       `https://rnative-a0ca6-default-rtdb.firebaseio.com/orders/${userId}.json`,
       {
@@ -18,6 +19,7 @@ export const fetchOrders = () => {
     }
 
     const resData = await response.json();
+    console.log(response);
     const loadedOrders = [];
     for (const key in resData) {
       loadedOrders.push(
@@ -29,18 +31,15 @@ export const fetchOrders = () => {
         )
       );
     }
-    console.log(loadedOrders);
-    console.log('AAAA', loadedOrders);
     dispatch({ type: SET_ORDERS, orders: loadedOrders });
   };
 };
 export const addOrder = (cartItems, totalAmount) => {
   return async (dispatch, getState) => {
-    console.log(getState());
     const token = getState().auth.token;
     const userId = getState().auth.userId;
     const date = new Date();
-    console.log(token);
+
     const response = await fetch(
       `https://rnative-a0ca6-default-rtdb.firebaseio.com/orders/${userId}.json?auth=${token}`,
       {
@@ -57,7 +56,7 @@ export const addOrder = (cartItems, totalAmount) => {
     );
 
     const resData = await response.json();
-    console.log(resData);
+
     if (!response.ok) {
       throw new Error('Error');
     }
