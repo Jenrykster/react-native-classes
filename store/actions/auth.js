@@ -4,6 +4,11 @@ export const SIGNUP = 'SIGNUP';
 export const LOGIN = 'LOGIN';
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const LOGOUT = 'LOGOUT';
+export const SET_DID_TRY_AL = 'SET_DID_TRY_AL';
+
+export const setDidTryAl = () => {
+  return { type: SET_DID_TRY_AL };
+};
 
 let timer;
 
@@ -37,7 +42,7 @@ const clearLogoutTimer = () => {
 export const signup = (email, password) => {
   return async (dispatch) => {
     const response = await fetch(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAyO0C51dlOlQLze4n0ypFmhPTXH-fhP5Y',
+      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBKopoTHPGAmXf77O4hr539syNTYkTu7qA',
       {
         method: 'POST',
         header: {
@@ -82,7 +87,7 @@ export const signup = (email, password) => {
 export const login = (email, password) => {
   return async (dispatch) => {
     const response = await fetch(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAyO0C51dlOlQLze4n0ypFmhPTXH-fhP5Y',
+      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBKopoTHPGAmXf77O4hr539syNTYkTu7qA',
       {
         method: 'POST',
         header: {

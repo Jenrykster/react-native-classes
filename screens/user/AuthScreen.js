@@ -162,7 +162,7 @@ const AuthScreen = (props) => {
   );
 };
 
-AuthScreen.navigationOptions = {
+export const screenOptions = {
   title: 'Authentication',
 };
 const styles = StyleSheet.create({
