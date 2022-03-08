@@ -4,25 +4,36 @@
     "slug": "12-places",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icons/places.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash_icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#171717"
     },
+
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["assets/**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "package": "com.jenryk.great_places",
+      "versionCode": 1,
+      "config": {
+        "googleMaps": {
+          "apiKey": "API_HERE"
+        }
+      },
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "CAMERA",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/icons/places-adaptive.png",
+        "backgroundColor": "#000000"
       }
     },
     "web": {
